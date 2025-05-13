@@ -10,51 +10,87 @@ import {
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "./contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [generators, setGenerators] = useState(false);
+  const { user, isAuthenticated, login, logout } = useAuth();
   return (
     <main className="container mx-auto py-8">
       <div className="flex justify-end">
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Minhas Criações</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                  Cidades
-                </NavigationMenuLink>
-                <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                  Locais
-                </NavigationMenuLink>
-                <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                  NPC's
-                </NavigationMenuLink>
-                <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                  Quests
-                </NavigationMenuLink>
-              </NavigationMenuContent>
+              {isAuthenticated === true ? (
+                <>
+                  {" "}
+                  <NavigationMenuTrigger>Minhas Criações</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
+                      Cidades
+                    </NavigationMenuLink>
+                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
+                      Locais
+                    </NavigationMenuLink>
+                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
+                      NPC's
+                    </NavigationMenuLink>
+                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
+                      Quests
+                    </NavigationMenuLink>
+                  </NavigationMenuContent>
+                </>
+              ) : (
+                <></>
+              )}
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Perfil</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                  Configurações
-                </NavigationMenuLink>
-                <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                  Criar Time
-                </NavigationMenuLink>
-                <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                  Tema
-                </NavigationMenuLink>
-                <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                  Sair
-                </NavigationMenuLink>
-              </NavigationMenuContent>
+              {isAuthenticated === true ? (
+                <>
+                  <NavigationMenuTrigger>Perfil</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
+                      Configurações
+                    </NavigationMenuLink>
+                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
+                      Criar Time
+                    </NavigationMenuLink>
+                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
+                      Tema
+                    </NavigationMenuLink>
+                    <NavigationMenuLink
+                      className="w-full px-4 py-2 hover:bg-muted rounded"
+                      onClick={() => logout()}
+                    >
+                      Sair
+                    </NavigationMenuLink>
+                  </NavigationMenuContent>
+                </>
+              ) : (
+                <div className="flex gap-2">
+                  <Link href="/login">
+                    <Button
+                      variant="outline"
+                      className="border-black text-black bg-white hover:bg-gray-100"
+                    >
+                      Entrar
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button
+                      variant="default"
+                      className="bg-black text-white hover:bg-gray-900"
+                    >
+                      Registrar
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

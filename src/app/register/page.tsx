@@ -3,6 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { api } from "@/app/services/api";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CheckCircle, AlertCircle } from "lucide-react";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -12,6 +17,7 @@ export default function RegisterPage() {
     confirmPassword: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,10 +32,10 @@ export default function RegisterPage() {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
 
-    // Validação de senha
     if (formData.password !== formData.confirmPassword) {
-      setError("As senhas não coincidem");
+      setError("As senhas não coincidem.");
       setIsLoading(false);
       return;
     }
@@ -41,11 +47,10 @@ export default function RegisterPage() {
         password: formData.password,
       });
 
-      // Opcional: fazer login automaticamente após o registro
-      // await login(formData.email, formData.password);
-
-      // Ou redirecionar para a página de login
-      window.location.href = "/login";
+      setSuccess("Conta criada com sucesso! Redirecionando para login...");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1500);
     } catch (error) {
       setError("Erro ao criar conta. Por favor, tente novamente.");
     } finally {
@@ -54,96 +59,102 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-muted/50">
+      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-xl border">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="text-center text-3xl font-bold text-gray-900">
             Criar nova conta
           </h2>
+          <p className="mt-2 text-center text-sm text-muted-foreground">
+            Preencha os campos abaixo para se cadastrar
+          </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-4">
+        <form className="space-y-6" onSubmit={handleSubmit} autoComplete="off">
+          <div className="space-y-4">
             <div>
-              <label htmlFor="name" className="sr-only">
-                Nome
-              </label>
-              <input
+              <Label htmlFor="name">Nome completo</Label>
+              <Input
                 id="name"
                 name="name"
                 type="text"
+                placeholder="Seu nome"
                 required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Nome completo"
                 value={formData.name}
                 onChange={handleChange}
+                autoComplete="name"
               />
             </div>
             <div>
-              <label htmlFor="email" className="sr-only">
-                Email
-              </label>
-              <input
+              <Label htmlFor="email">Email</Label>
+              <Input
                 id="email"
                 name="email"
                 type="email"
+                placeholder="seu@email.com"
                 required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
+                autoComplete="email"
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
-                Senha
-              </label>
-              <input
+              <Label htmlFor="password">Senha</Label>
+              <Input
                 id="password"
                 name="password"
                 type="password"
-                required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Senha"
+                required
                 value={formData.password}
                 onChange={handleChange}
+                autoComplete="new-password"
               />
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="sr-only">
-                Confirmar Senha
-              </label>
-              <input
+              <Label htmlFor="confirmPassword">Confirmar senha</Label>
+              <Input
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
+                placeholder="Confirme sua senha"
                 required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Confirmar senha"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                autoComplete="new-password"
               />
             </div>
           </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
+            <Alert variant="destructive">
+              <AlertCircle className="h-5 w-5" />
+              <AlertTitle>Erro</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
           )}
 
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? "Criando conta..." : "Criar conta"}
-            </button>
-          </div>
+          {success && (
+            <Alert variant="success" className="bg-green-50 border-green-400">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+              <AlertTitle>Sucesso</AlertTitle>
+              <AlertDescription>{success}</AlertDescription>
+            </Alert>
+          )}
 
-          <div className="text-center text-sm">
-            <span className="text-gray-600">Já tem uma conta?</span>{" "}
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+            size="lg"
+          >
+            {isLoading ? "Criando conta..." : "Criar conta"}
+          </Button>
+
+          <div className="text-center text-sm mt-2">
+            <span className="text-muted-foreground">Já tem uma conta?</span>{" "}
             <Link
               href="/login"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
+              className="font-medium text-primary hover:underline"
             >
               Faça login
             </Link>
