@@ -1,7 +1,8 @@
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { API_CONFIG } from './config';
-import { CreateUserDto, UpdateUserDto, LoginResponse, User, ApiError, CreateFieldDto, Field, UpdateFieldDto, Section, Town } from './types';
+import { CreateUserDto, UpdateUserDto, LoginResponse, User, ApiError, Town } from './types';
 
-// Adicionando tipos para Sheets
+// Sheet interfaces remain the same
 export interface Sheet {
   id: number;
   name: string;
@@ -21,147 +22,157 @@ export interface UpdateSheetDto {
 }
 
 class ApiService {
-  private getHeaders(includeAuth: boolean = true): HeadersInit {
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-    };
+  private axiosInstance: AxiosInstance;
+  private axiosInstanceNoAuth: AxiosInstance;
 
-    if (includeAuth) {
+  constructor() {
+    // Instance with auth interceptor
+    this.axiosInstance = axios.create({
+      baseURL: API_CONFIG.BASE_URL,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Instance without auth interceptor
+    this.axiosInstanceNoAuth = axios.create({
+      baseURL: API_CONFIG.BASE_URL,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Add auth interceptor
+    this.axiosInstance.interceptors.request.use((config) => {
       const token = localStorage.getItem('token');
+      console.log("TOKEN AUTH" + token)
       if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+        const cleanToken = token.replace(/^["'](.*)["']$/, '$1');
+        config.headers.Authorization = `Bearer ${cleanToken}`;
       }
-    }
+      return config;
+    });
 
-    return headers;
-  }
-
-  private async handleResponse<T>(response: Response): Promise<T> {
-    if (!response.ok) {
-      const error: ApiError = await response.json();
-      throw new Error(error.message || 'An error occurred');
-    }
-
-    const responseData = await response.json()
-    return responseData.data;
+    // Add response interceptor to handle data wrapper
+    const responseInterceptor = (response: AxiosResponse) => response.data.data;
+    const errorInterceptor = (error: any) => {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          localStorage.removeItem('token');
+          window.location.href = '/login'; // Or use your router here
+        }
+        throw new Error(error.response?.data?.message || 'An error occurred');
+      }
+      throw error;
+    };
+    this.axiosInstance.interceptors.response.use(responseInterceptor, errorInterceptor);
+    this.axiosInstanceNoAuth.interceptors.response.use(responseInterceptor, errorInterceptor);
   }
 
   // Auth endpoints
   async login(email: string, password: string): Promise<LoginResponse> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.LOGIN}`, {
-        method: 'POST',
-        headers: this.getHeaders(false),
-        body: JSON.stringify({ email, password }),
+      return await this.axiosInstanceNoAuth.post(API_CONFIG.ENDPOINTS.LOGIN, {
+        email,
+        password,
       });
-
-      return this.handleResponse<LoginResponse>(response);
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Login failed');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Login failed');
+      }
+      throw error;
     }
   }
 
   // User endpoints
   async createUser(userData: CreateUserDto): Promise<User> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.USERS}`, {
-        method: 'POST',
-        headers: this.getHeaders(false),
-        body: JSON.stringify(userData),
-      });
-
-      return this.handleResponse<User>(response);
+      return await this.axiosInstanceNoAuth.post(API_CONFIG.ENDPOINTS.USERS, userData);
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Failed to create user');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to create user');
+      }
+      throw error;
     }
   }
 
   async getAllUsers(): Promise<User[]> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.USERS}`, {
-        headers: this.getHeaders(),
-      });
-
-      return this.handleResponse<User[]>(response);
+      return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.USERS);
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Failed to fetch users');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch users');
+      }
+      throw error;
     }
   }
 
   async getUserById(id: number): Promise<User> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.USERS}/${id}`, {
-        headers: this.getHeaders(),
-      });
-
-      return this.handleResponse<User>(response);
+      return await this.axiosInstance.get(`${API_CONFIG.ENDPOINTS.USERS}/${id}`);
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Failed to fetch user');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch user');
+      }
+      throw error;
     }
   }
 
   async updateUser(id: number, userData: UpdateUserDto): Promise<User> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.USERS}/${id}`, {
-        method: 'PUT',
-        headers: this.getHeaders(),
-        body: JSON.stringify(userData),
-      });
-
-      return this.handleResponse<User>(response);
+      return await this.axiosInstance.put(`${API_CONFIG.ENDPOINTS.USERS}/${id}`, userData);
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Failed to update user');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to update user');
+      }
+      throw error;
     }
   }
 
   async deleteUser(id: number): Promise<void> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.USERS}/${id}`, {
-        method: 'DELETE',
-        headers: this.getHeaders(),
-      });
-
-      return this.handleResponse<void>(response);
+      return await this.axiosInstance.delete(`${API_CONFIG.ENDPOINTS.USERS}/${id}`);
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Failed to delete user');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to delete user');
+      }
+      throw error;
     }
   }
 
   async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.RESET_PASSWORD}`, {
-        method: 'POST',
-        headers: this.getHeaders(false),
-        body: JSON.stringify({ token, newPassword }),
+      return await this.axiosInstanceNoAuth.post(API_CONFIG.ENDPOINTS.RESET_PASSWORD, {
+        token,
+        newPassword,
       });
-
-      return this.handleResponse<{ message: string }>(response);
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Failed to reset password');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to reset password');
+      }
+      throw error;
     }
   }
 
   async generateNewTown(): Promise<Town> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.GENERATE_TOWN}`, {
-        headers: this.getHeaders(),
-      });
-
-      return this.handleResponse<Town>(response);
+      return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.GENERATE_TOWN);
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Failed to fetch users');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to generate town');
+      }
+      throw error;
     }
   }
 
   async getAllTowns(): Promise<any[]> {
     try {
-      const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.TOWNS}`, {
-        headers: this.getHeaders(),
-      });
-
-      return this.handleResponse<any[]>(response);
+      return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.TOWNS);
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Failed to fetch users');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+      }
+      throw error;
     }
   }
 }

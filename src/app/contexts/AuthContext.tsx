@@ -35,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await api.login(email, password);
       console.log(response);
 
+      localStorage.setItem("token", JSON.stringify(response.access_token));
       localStorage.setItem("user", JSON.stringify(response.user));
       setUser(response.user);
       router.push("/");
