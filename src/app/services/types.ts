@@ -26,6 +26,21 @@ export interface ApiError {
   statusCode: number;
 }
 
+export type Npc = {
+  id: number;
+  townId: number;
+  town: Town;
+  name: string;
+  race: string;
+  age: string;
+  description: string;
+  ocupation: string;
+  history: string;
+  interest: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type Town = {
   id: number;
   name: string;
@@ -47,13 +62,3 @@ export type Location = {
   description: string;
 };
 
-export type Npc = {
-  id: number;
-  name: string;
-  race: string;
-  age: string;
-  description: string;
-  ocupation: string;
-  history: string;
-  interest: string;
-};

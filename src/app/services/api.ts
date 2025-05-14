@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { API_CONFIG } from './config';
-import { CreateUserDto, UpdateUserDto, LoginResponse, User, ApiError, Town } from './types';
+import { CreateUserDto, UpdateUserDto, LoginResponse, User, ApiError, Town, Npc } from './types';
 
 // Sheet interfaces remain the same
 export interface Sheet {
@@ -165,9 +165,31 @@ class ApiService {
     }
   }
 
-  async getAllTowns(): Promise<any[]> {
+  async generateNewNpc(): Promise<Npc> {
     try {
-      return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.TOWNS);
+      return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.GENERATE_NPCS);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to generate town');
+      }
+      throw error;
+    }
+  }
+
+  async getAllTowns(): Promise<Town[]> {
+    try {
+      return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.TOWNS);;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+      }
+      throw error;
+    }
+  }
+
+  async getAllNpcs(): Promise<Npc[]> {
+    try {
+      return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.NPCS);;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new Error(error.response?.data?.message || 'Failed to fetch towns');

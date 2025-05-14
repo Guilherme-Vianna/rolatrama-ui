@@ -12,100 +12,26 @@ import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "./contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import TopBar from "./components/TopBar";
 
 export default function Home() {
   const [generators, setGenerators] = useState(false);
   const { user, isAuthenticated, login, logout } = useAuth();
   return (
     <main className="container mx-auto py-8">
-      <div className="flex justify-end">
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              {isAuthenticated === true ? (
-                <>
-                  {" "}
-                  <NavigationMenuTrigger>Minhas Criações</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                      Cidades
-                    </NavigationMenuLink>
-                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                      Locais
-                    </NavigationMenuLink>
-                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                      NPC's
-                    </NavigationMenuLink>
-                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                      Quests
-                    </NavigationMenuLink>
-                  </NavigationMenuContent>
-                </>
-              ) : (
-                <></>
-              )}
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              {isAuthenticated === true ? (
-                <>
-                  <NavigationMenuTrigger>Perfil</NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                      Configurações
-                    </NavigationMenuLink>
-                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                      Criar Time
-                    </NavigationMenuLink>
-                    <NavigationMenuLink className="w-full px-4 py-2 hover:bg-muted rounded">
-                      Tema
-                    </NavigationMenuLink>
-                    <NavigationMenuLink
-                      className="w-full px-4 py-2 hover:bg-muted rounded"
-                      onClick={() => logout()}
-                    >
-                      Sair
-                    </NavigationMenuLink>
-                  </NavigationMenuContent>
-                </>
-              ) : (
-                <div className="flex gap-2">
-                  <Link href="/login">
-                    <Button
-                      variant="outline"
-                      className="border-black text-black bg-white hover:bg-gray-100"
-                    >
-                      Entrar
-                    </Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button
-                      variant="default"
-                      className="bg-black text-white hover:bg-gray-900"
-                    >
-                      Registrar
-                    </Button>
-                  </Link>
-                </div>
-              )}
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
+      <TopBar />
+
       <div className="flex py-52 items-center justify-center">
         {generators === true ? (
           <>
-            <div className="grid grid-cols-5 gap-12 px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8 lg:gap-12 px-4 md:px-8">
               <Link
                 className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-pointer shadow-md"
                 href="/towns"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-24 w-24 text-primary mb-4"
+                  className="h-16 md:h-24 w-16 md:w-24 text-primary mb-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -117,12 +43,16 @@ export default function Home() {
                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
                   />
                 </svg>
-                <span className="text-xl font-medium">Cidades</span>
+                <span className="text-lg md:text-xl font-medium">Cidades</span>
               </Link>
-              <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-not-allowed opacity-50 shadow-md ">
+
+              <Link
+                className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-pointer shadow-md"
+                href="/npcs"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-24 w-24 text-primary mb-4"
+                  className="h-16 md:h-24 w-16 md:w-24 text-primary mb-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -134,12 +64,16 @@ export default function Home() {
                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
                   />
                 </svg>
-                <span className="text-xl font-medium">NPC`s</span>
-              </div>
-              <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-not-allowed opacity-50 shadow-md">
+                <span className="text-lg md:text-xl font-medium">NPC's</span>
+              </Link>
+
+              <Link
+                className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-not-allowed opacity-50 shadow-md pointer-events-none"
+                href="/npcs"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-24 w-24 text-primary mb-4"
+                  className="h-16 md:h-24 w-16 md:w-24 text-primary mb-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -151,12 +85,16 @@ export default function Home() {
                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
                   />
                 </svg>
-                <span className="text-xl font-medium">Item</span>
-              </div>
-              <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-not-allowed opacity-50 shadow-md">
+                <span className="text-lg md:text-xl font-medium">Item</span>
+              </Link>
+
+              <Link
+                className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-not-allowed opacity-50 shadow-md pointer-events-none"
+                href="#"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-24 w-24 text-primary mb-4"
+                  className="h-16 md:h-24 w-16 md:w-24 text-primary mb-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -168,12 +106,18 @@ export default function Home() {
                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
                   />
                 </svg>
-                <span className="text-xl font-medium">Historias</span>
-              </div>
-              <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-not-allowed opacity-50 shadow-md">
+                <span className="text-lg md:text-xl font-medium">
+                  Histórias
+                </span>
+              </Link>
+
+              <Link
+                className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors cursor-not-allowed opacity-50 shadow-md pointer-events-none"
+                href="#"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-24 w-24 text-primary mb-4"
+                  className="h-16 md:h-24 w-16 md:w-24 text-primary mb-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -185,8 +129,8 @@ export default function Home() {
                     d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
                   />
                 </svg>
-                <span className="text-xl font-medium">Locais</span>
-              </div>
+                <span className="text-lg md:text-xl font-medium">Locais</span>
+              </Link>
             </div>
           </>
         ) : (

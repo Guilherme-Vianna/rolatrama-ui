@@ -20,31 +20,23 @@ import {
   Shield,
   Trash2,
 } from "lucide-react";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
 import { Town } from "../services/types";
 import { api } from "../services/api";
 import TopBar from "../components/TopBar";
 
 export default function Home() {
   const [cities, setCities] = useState<Town[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  function requestNewCity() {
-    setIsLoading(true);
+  function loadCities() {
     const request = async () => {
       try {
-        const response = await api.generateNewTown();
-        setCities((prevCities) => [...prevCities, response]);
+        setIsLoading(true);
+        const result = await api.getAllTowns();
+        console.log(result);
+        setCities(result);
       } catch (error) {
-        console.error("Erro ao gerar cidade:", error);
+        console.error("Erro ao carregar cidades:", error);
       } finally {
         setIsLoading(false);
       }
@@ -52,51 +44,22 @@ export default function Home() {
     request();
   }
 
-  function removeCity(cityId: number) {
-    setCities((prevCities) => prevCities.filter((city) => city.id !== cityId));
-  }
-
   useEffect(() => {
-    console.log(cities);
-  }, [cities]);
+    loadCities();
+  }, []);
 
+  // Renderização condicional
+  if (isLoading) {
+    return <div>Carregando...</div>; // Ou um componente de loading
+  }
   return (
     <main className="container mx-auto py-8 ">
       <TopBar />
+      <h1 className="text-3xl font-bold text-center mb-8">Minhas Cidades</h1>
 
-      <h1 className="text-3xl font-bold text-center mb-8">
-        Gerador de Cidades de RPG
-      </h1>
-
-      <div className="grid gap-8 md:grid-cols-[350px_1fr]">
-        {/* Painel de controle */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Painel de Configuração</CardTitle>
-            </CardHeader>
-            <CardFooter className="flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={requestNewCity}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Dice5 className="mr-2 h-4 w-4" />
-                )}
-                {isLoading ? "Gerando..." : "Aleatória"}
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-
+      <div className="grid gap-8">
         {/* Lista de cidades */}
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold">Suas Cidades</h2>
-
           {cities.length === 0 ? (
             <div className="text-center py-12 bg-muted rounded-lg">
               <p className="text-muted-foreground">
@@ -116,14 +79,6 @@ export default function Home() {
                           {city.size}
                         </CardDescription>
                       </div>
-                      <Button
-                        variant="ghost"
-                        onClick={() => removeCity(city.id)}
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
                     </div>
                   </CardHeader>
                   <CardContent className="pt-4">
@@ -181,6 +136,14 @@ export default function Home() {
                             {city.criminality}
                           </p>
                         </div>
+                      </div>
+
+                      {/* Operacoes */}
+                      <div className="flex flex-col sm:flex-row justify-center gap-5 w-full">
+                        <Button className="w-full sm:w-1/2">
+                          Gerar Localizações
+                        </Button>
+                        <Button className="w-full sm:w-1/2">Gerar NPC's</Button>
                       </div>
 
                       {/* Data de criação */}

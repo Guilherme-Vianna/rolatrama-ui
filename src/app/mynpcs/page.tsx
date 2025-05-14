@@ -12,39 +12,35 @@ import {
 } from "@/components/ui/card";
 import {
   Book,
+  Briefcase,
+  Calendar,
   Cloud,
   Dice5,
   DollarSign,
+  Heart,
   Loader2,
   MapPin,
   Shield,
   Trash2,
+  User,
 } from "lucide-react";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { Town } from "../services/types";
+import { Npc } from "../services/types";
 import { api } from "../services/api";
 import TopBar from "../components/TopBar";
 
 export default function Home() {
-  const [cities, setCities] = useState<Town[]>([]);
+  const [npcs, setNpcs] = useState<Npc[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  function requestNewCity() {
-    setIsLoading(true);
+  function loadCities() {
     const request = async () => {
       try {
-        const response = await api.generateNewTown();
-        setCities((prevCities) => [...prevCities, response]);
+        setIsLoading(true);
+        const result = await api.getAllNpcs();
+        console.log(result);
+        setNpcs(result);
       } catch (error) {
-        console.error("Erro ao gerar cidade:", error);
+        console.error("Erro ao carregar cidades:", error);
       } finally {
         setIsLoading(false);
       }
@@ -52,52 +48,24 @@ export default function Home() {
     request();
   }
 
-  function removeCity(cityId: number) {
-    setCities((prevCities) => prevCities.filter((city) => city.id !== cityId));
-  }
-
   useEffect(() => {
-    console.log(cities);
-  }, [cities]);
+    loadCities();
+  }, []);
+
+  // Renderização condicional
+  if (isLoading) {
+    return <div>Carregando...</div>; // Ou um componente de loading
+  }
 
   return (
     <main className="container mx-auto py-8 ">
       <TopBar />
+      <h1 className="text-3xl font-bold text-center mb-8">Meus NPC's</h1>
 
-      <h1 className="text-3xl font-bold text-center mb-8">
-        Gerador de Cidades de RPG
-      </h1>
-
-      <div className="grid gap-8 md:grid-cols-[350px_1fr]">
-        {/* Painel de controle */}
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Painel de Configuração</CardTitle>
-            </CardHeader>
-            <CardFooter className="flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={requestNewCity}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Dice5 className="mr-2 h-4 w-4" />
-                )}
-                {isLoading ? "Gerando..." : "Aleatória"}
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
-
+      <div className="grid gap-8">
         {/* Lista de cidades */}
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold">Suas Cidades</h2>
-
-          {cities.length === 0 ? (
+          {npcs.length === 0 ? (
             <div className="text-center py-12 bg-muted rounded-lg">
               <p className="text-muted-foreground">
                 Nenhuma cidade foi gerada ainda!
@@ -105,20 +73,19 @@ export default function Home() {
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {cities.map((city) => (
-                <Card key={city.id} className="overflow-hidden">
+              {npcs.map((npc) => (
+                <Card key={npc.id} className="overflow-hidden">
                   <CardHeader className="pb-2 bg-muted/50">
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle>{city.name}</CardTitle>
+                        <CardTitle>{npc.name}</CardTitle>
                         <CardDescription className="flex items-center gap-1">
-                          <span className="font-medium">Tamanho:</span>{" "}
-                          {city.size}
+                          <span className="font-medium">Raça:</span> {npc.race}
                         </CardDescription>
                       </div>
                       <Button
                         variant="ghost"
-                        onClick={() => removeCity(city.id)}
+                        onClick={() => removeNpc(npc.id)}
                         size="icon"
                         className="h-8 w-8 text-muted-foreground hover:text-destructive"
                       >
@@ -128,24 +95,24 @@ export default function Home() {
                   </CardHeader>
                   <CardContent className="pt-4">
                     <div className="space-y-3">
-                      {/* Clima */}
+                      {/* Idade */}
                       <div className="flex items-start gap-2">
-                        <Cloud className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                        <Calendar className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-medium">Clima</p>
+                          <p className="text-sm font-medium">Idade</p>
                           <p className="text-sm text-muted-foreground">
-                            {city.whether}
+                            {npc.age}
                           </p>
                         </div>
                       </div>
 
-                      {/* Localização */}
+                      {/* Ocupação */}
                       <div className="flex items-start gap-2">
-                        <MapPin className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                        <Briefcase className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-medium">Localização</p>
+                          <p className="text-sm font-medium">Ocupação</p>
                           <p className="text-sm text-muted-foreground line-clamp-2">
-                            {city.locationDescription}
+                            {npc.ocupation}
                           </p>
                         </div>
                       </div>
@@ -156,29 +123,29 @@ export default function Home() {
                         <div>
                           <p className="text-sm font-medium">História</p>
                           <p className="text-sm text-muted-foreground line-clamp-2">
-                            {city.history}
+                            {npc.history}
                           </p>
                         </div>
                       </div>
 
-                      {/* Economia */}
+                      {/* Descrição */}
                       <div className="flex items-start gap-2">
-                        <DollarSign className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                        <User className="h-5 w-5 text-purple-500 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-medium">Economia</p>
+                          <p className="text-sm font-medium">Descrição</p>
                           <p className="text-sm text-muted-foreground line-clamp-2">
-                            {city.economy}
+                            {npc.description}
                           </p>
                         </div>
                       </div>
 
-                      {/* Criminalidade */}
+                      {/* Interesses */}
                       <div className="flex items-start gap-2">
-                        <Shield className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                        <Heart className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-sm font-medium">Criminalidade</p>
+                          <p className="text-sm font-medium">Interesses</p>
                           <p className="text-sm text-muted-foreground">
-                            {city.criminality}
+                            {npc.interest}
                           </p>
                         </div>
                       </div>
@@ -186,7 +153,7 @@ export default function Home() {
                       {/* Data de criação */}
                       <div className="text-xs text-muted-foreground pt-2 border-t">
                         Criado em:{" "}
-                        {new Date(city.createdAt).toLocaleDateString()}
+                        {new Date(npc.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                   </CardContent>

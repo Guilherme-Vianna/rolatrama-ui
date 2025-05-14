@@ -6,5 +6,7 @@ export const API_CONFIG = {
     RESET_PASSWORD: '/users/reset-password',
     TOWNS: '/ai/towns',
     GENERATE_TOWN: '/ai/generate/town',
+    GENERATE_NPCS: '/ai/generate/npcs',
+    NPCS: '/ai/npcs',
   },
 };
