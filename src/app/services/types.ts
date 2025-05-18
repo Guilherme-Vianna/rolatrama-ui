@@ -26,6 +26,17 @@ export interface ApiError {
   statusCode: number;
 }
 
+export type MultiCreatorProps = {
+  title: string;
+};
+
+export type Spell = {
+  id: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type Npc = {
   id: number;
   townId: number;
