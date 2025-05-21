@@ -30,6 +30,25 @@ export type MultiCreatorProps = {
   title: string;
 };
 
+export type RPGSheet3DTModel = {
+  forca: string;
+  habilidade: string;
+  resistencia: string;
+  armadura: string;
+  poder_de_fogo: string;
+  pontos_de_vida: string;
+  pontos_de_vida_atual: string;
+  pontos_de_magia: string;
+  pontos_de_magia_atual: string;
+  pontos_de_experiencia: string;
+  tipos_de_dano: string[];
+  magias: string[];
+  dinheiro_e_itens: string[];
+  historia: string;
+  vantagens: string[];
+};
+
+
 export type Spell = {
   id: number;
   name: string;

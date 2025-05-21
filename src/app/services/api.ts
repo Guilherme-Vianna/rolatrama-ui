@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { API_CONFIG } from './config';
-import { CreateUserDto, UpdateUserDto, LoginResponse, User, ApiError, Town, Npc } from './types';
+import { CreateUserDto, UpdateUserDto, LoginResponse, User, ApiError, Town, Npc, RPGSheet3DTModel } from './types';
 
 // Sheet interfaces remain the same
 export interface Sheet {
@@ -190,6 +190,39 @@ class ApiService {
   async getAllNpcs(): Promise<Npc[]> {
     try {
       return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.NPCS);;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+      }
+      throw error;
+    }
+  }
+
+  async createSheet(data: any): Promise<Sheet> {
+    try {
+      return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.SHEETS, data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+      }
+      throw error;
+    }
+  }
+
+  async updateSheet(data: any, id: number): Promise<Sheet> {
+    try {
+      return await this.axiosInstance.put(API_CONFIG.ENDPOINTS.SHEETS + "/" + id, data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+      }
+      throw error;
+    }
+  }
+
+  async getSheet(id: number): Promise<RPGSheet3DTModel> {
+    try {
+      return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.SHEETS + "/" + id);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new Error(error.response?.data?.message || 'Failed to fetch towns');
