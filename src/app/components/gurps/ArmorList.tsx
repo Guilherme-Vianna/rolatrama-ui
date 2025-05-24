@@ -3,12 +3,12 @@
 import {Button} from "@/components/ui/button";
 import {useEffect, useState} from "react";
 import {Check, Edit, Trash, X} from "lucide-react";
-import {RPGSheetGURPSLanguages} from "@/app/services/types";
+import {RPGSheetGURPSArmor} from "@/app/services/types";
 
-export default function LanguageList({onValueChange, value, fieldName}) {
+export default function ArmorList({onValueChange, value, fieldName}) {
     const [isAdding, setIsAdding] = useState(false);
-    const [items, setitems] = useState<RPGSheetGURPSLanguages[]>([]);
-    const [newItem, setnewItem] = useState<RPGSheetGURPSLanguages>({});
+    const [items, setitems] = useState<RPGSheetGURPSArmor[]>([]);
+    const [newItem, setnewItem] = useState<RPGSheetGURPSArmor>({});
 
     useEffect(() => {
         if (value && Array.isArray(value)) {
@@ -25,17 +25,17 @@ export default function LanguageList({onValueChange, value, fieldName}) {
     }, [items]);
 
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const [editingItem, seteditingItem] = useState<RPGSheetGURPSLanguages>({});
+    const [editingItem, seteditingItem] = useState<RPGSheetGURPSArmor>({});
 
     function addLanguage() {
-        if (newItem.name.trim()) {
+        if (newItem.item.trim()) {
             setitems([...items, newItem]);
             setnewItem({});
             setIsAdding(false);
         }
     }
 
-    function handleInputChange(field: keyof RPGSheetGURPSLanguages, value: string) {
+    function handleInputChange(field: keyof RPGSheetGURPSArmor, value: string) {
         setnewItem({
             ...newItem,
             [field]: value
@@ -56,7 +56,7 @@ export default function LanguageList({onValueChange, value, fieldName}) {
         }
     }
 
-    function handleEditChange(field: keyof RPGSheetGURPSLanguages, value: string) {
+    function handleEditChange(field: keyof RPGSheetGURPSArmor, value: string) {
         seteditingItem({
             ...editingItem,
             [field]: value
@@ -68,10 +68,10 @@ export default function LanguageList({onValueChange, value, fieldName}) {
             {items.length > 0 && (
                 <div className="mb-4">
                     <div className="grid grid-cols-6 font-bold mb-1 text-center">
-                        <div>Nome</div>
-                        <div>Falada</div>
-                        <div>Escrita</div>
-                        <div>Pontos</div>
+                        <div>Item</div>
+                        <div>Posicao</div>
+                        <div>Custo</div>
+                        <div>Peso</div>
                     </div>
                     {items.map((items, index) => (
                         <div key={index} className="grid grid-cols-6 mb-1 text-center items-center">
@@ -79,23 +79,23 @@ export default function LanguageList({onValueChange, value, fieldName}) {
                                 <>
                                     <input
                                         className="border border-gray-300 w-full text-center p-1"
-                                        value={editingItem.name}
-                                        onChange={(e) => handleEditChange('name', e.target.value)}
+                                        value={editingItem.item}
+                                        onChange={(e) => handleEditChange('item', e.target.value)}
                                     />
                                     <input
                                         className="border border-gray-300 w-full text-center p-1"
-                                        value={editingItem.falada}
-                                        onChange={(e) => handleEditChange('falada', e.target.value)}
+                                        value={editingItem.posicao}
+                                        onChange={(e) => handleEditChange('posicao', e.target.value)}
                                     />
                                     <input
                                         className="border border-gray-300 w-full text-center p-1"
-                                        value={editingItem.escrita}
-                                        onChange={(e) => handleEditChange('escrita', e.target.value)}
+                                        value={editingItem.custo}
+                                        onChange={(e) => handleEditChange('custo', e.target.value)}
                                     />
                                     <input
                                         className="border border-gray-300 w-full text-center p-1"
-                                        value={editingItem.pontos}
-                                        onChange={(e) => handleEditChange('pontos', e.target.value)}
+                                        value={editingItem.peso}
+                                        onChange={(e) => handleEditChange('peso', e.target.value)}
                                     />
                                     <div>
                                         <Check
@@ -112,10 +112,10 @@ export default function LanguageList({onValueChange, value, fieldName}) {
                                 </>
                             ) : (
                                 <>
-                                    <div>{items.name}</div>
-                                    <div>{items.falada}</div>
-                                    <div>{items.escrita}</div>
-                                    <div>{items.pontos}</div>
+                                    <div>{items.item}</div>
+                                    <div>{items.posicao}</div>
+                                    <div>{items.custo}</div>
+                                    <div>{items.peso}</div>
                                     <div>
                                         <Edit
                                             className="cursor-pointer mx-auto"
@@ -145,27 +145,27 @@ export default function LanguageList({onValueChange, value, fieldName}) {
                     <div className="grid grid-cols-6 gap-2">
                         <input
                             className="border border-gray-300 w-full text-center p-1"
-                            placeholder="nome"
-                            value={newItem.name}
-                            onChange={(e) => handleInputChange('name', e.target.value)}
+                            placeholder="item"
+                            value={newItem.item}
+                            onChange={(e) => handleInputChange('item', e.target.value)}
                         />
                         <input
                             className="border border-gray-300 w-full text-center p-1"
-                            placeholder="falada"
-                            value={newItem.falada}
-                            onChange={(e) => handleInputChange('falada', e.target.value)}
+                            placeholder="posicao"
+                            value={newItem.posicao}
+                            onChange={(e) => handleInputChange('posicao', e.target.value)}
                         />
                         <input
                             className="border border-gray-300 w-full text-center p-1"
-                            placeholder="escrita"
-                            value={newItem.escrita}
-                            onChange={(e) => handleInputChange('escrita', e.target.value)}
+                            placeholder="custo"
+                            value={newItem.custo}
+                            onChange={(e) => handleInputChange('custo', e.target.value)}
                         />
                         <input
                             className="border border-gray-300 w-full text-center p-1"
-                            placeholder="pontos"
-                            value={newItem.pontos}
-                            onChange={(e) => handleInputChange('pontos', e.target.value)}
+                            placeholder="peso"
+                            value={newItem.peso}
+                            onChange={(e) => handleInputChange('peso', e.target.value)}
                         />
                     </div>
                     <div className="flex gap-2 justify-end">

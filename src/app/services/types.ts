@@ -111,11 +111,55 @@ export type RPGSheetGURPSModel = {
     status: string;
     reputacao: string;
     outros: string;
+    weapons: RPGSheetGURPSWeapon[];
+    ranged_weapons: RPGSheetGURPSRangedWeapon[];
+    armor: RPGSheetGURPSArmor[];
+    languages: RPGSheetGURPSLanguages[];
 };
+
+export type RPGSheetGURPSArmor = {
+    item: string;
+    posicao: string;
+    peso: string;
+    custo: string;
+}
 
 export type RPGSheetGURPSVantagemQualidade = {
     name: string;
     pontos: string;
+}
+
+export type RPGSheetGURPSWeapon = {
+    arma: string;
+    dano: string;
+    alcance: string;
+    aparar: string;
+    notas: string;
+    custo: string;
+    peso: string;
+}
+
+export type RPGSheetGURPSRangedWeapon = {
+    arma: string;
+    dano: string;
+    prec: string;
+    distancia: string;
+    cdT: string;
+    tiros: string;
+    st: string;
+    magnitude: string;
+    rco: string;
+    cl: string;
+    notas: string;
+    custo: string;
+    peso: string;
+}
+
+export type RPGSheetGURPSArmor = {
+    item: string;
+    posicao: string;
+    custo: string;
+    peso: string;
 }
 
 export type RPGSheet3DTModel = {

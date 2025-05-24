@@ -2,10 +2,8 @@
 import {Card, CardTitle, CardContent} from "@/components/ui/card";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import MultiCreator from "../MultiCreator";
-import {Textarea} from "@/components/ui/textarea";
 import {useEffect, useState} from "react";
-import {RPGSheet3DTModel, RPGSheetGURPSModel} from "@/app/services/types";
+import {RPGSheetGURPSModel} from "@/app/services/types";
 import {api} from "@/app/services/api";
 import {CheckCircle, Loader2, XCircle} from "lucide-react";
 import {Alert, AlertDescription} from "@/components/ui/alert";
@@ -16,6 +14,9 @@ import LanguageList from "../gurps/LanguageList";
 import AdvantageList from "@/app/components/gurps/AdvantageList";
 import CultureList from "@/app/components/gurps/CultureList";
 import PericiaList from "@/app/components/gurps/PericiaList";
+import WeaponsList from "@/app/components/gurps/WeaponsList";
+import RangedWeaponsList from "@/app/components/gurps/RangedWeaponsList";
+import ArmorList from "@/app/components/gurps/ArmorList";
 
 export default function GURPSSheet(params: any) {
     const [syncStatus, setSyncStatus] = useState("syncing");
@@ -96,16 +97,6 @@ export default function GURPSSheet(params: any) {
                 }));
             };
 
-    // const handleArrayChange = (
-    //     field: keyof RPGSheetGURPSModel,
-    //     value: string[]
-    // ) => {
-    //     setSheet((prev) => ({
-    //         ...prev,
-    //         [field]: value,
-    //     }));
-    // };
-
     useEffect(() => {
         console.log(sheet)
     }, [sheet]);
@@ -172,30 +163,34 @@ export default function GURPSSheet(params: any) {
                 <CardContent className="flex flex-col ">
                     <div className="flex justify-between">
                         <Label>Nome</Label>
-                        <Input className="w-40" onChange={(e) => handleChange("nome")(e)} value={sheet.nome}></Input>
+                        <Input className="w-40" onChange={(e) => handleChange("nome")(e.target.value)}
+                               value={sheet.nome}></Input>
                         <Label>Jogador</Label>
-                        <Input className="w-40" onChange={(e) => handleChange("jogador")(e)}
+                        <Input className="w-40" onChange={(e) => handleChange("jogador")(e.target.value)}
                                value={sheet.jogador}></Input>
                         <Label>Total de Pontos</Label>
-                        <Input className="w-20" onChange={(e) => handleChange("total_de_pontos")(e)}
+                        <Input className="w-20" onChange={(e) => handleChange("total_de_pontos")(e.target.value)}
                                value={sheet.total_de_pontos}></Input>
                     </div>
                     <div className="flex justify-between">
                         <Label>Altura</Label>
-                        <Input className="w-20" onChange={(e) => handleChange("altura")(e)} value={sheet.altura}/>
+                        <Input className="w-20" onChange={(e) => handleChange("altura")(e.target.value)}
+                               value={sheet.altura}/>
                         <Label>Peso</Label>
-                        <Input className="w-20" onChange={(e) => handleChange("peso")(e)} value={sheet.peso}/>
+                        <Input className="w-20" onChange={(e) => handleChange("peso")(e.target.value)}
+                               value={sheet.peso}/>
                         <Label>Mod Tamanho</Label>
-                        <Input className="w-20" onChange={(e) => handleChange("mod_tamanho")(e)}
+                        <Input className="w-20" onChange={(e) => handleChange("mod_tamanho")(e.target.value)}
                                value={sheet.mod_tamanho}/>
                         <Label>Idade</Label>
-                        <Input className="w-20" onChange={(e) => handleChange("idade")(e)} value={sheet.idade}/>
+                        <Input className="w-20" onChange={(e) => handleChange("idade")(e.target.value)}
+                               value={sheet.idade}/>
                         <Label>Pontos p/ Gastar</Label>
-                        <Input className="w-20" onChange={(e) => handleChange("pontos_para_gastar")(e)}
+                        <Input className="w-20" onChange={(e) => handleChange("pontos_para_gastar")(e.target.value)}
                                value={sheet.pontos_para_gastar}/>
                     </div>
                     <Label>Aparencia</Label>
-                    <Input className="w-full" onChange={(e) => handleChange("aparencia")(e)}
+                    <Input className="w-full" onChange={(e) => handleChange("aparencia")(e.target.value)}
                            value={sheet.aparencia}/>
                 </CardContent>
             </div>
@@ -444,12 +439,16 @@ export default function GURPSSheet(params: any) {
                                        onValueChange={handleChange}/>
                     </SectionContainer>
                     <SectionContainer title={"Desvantagens e Peculiariadades"}>
-                        {/*<AdvantageList onValueChange={handleChange} value={sheet.desvantagens_e_peculiaridades}/>*/}
+                        <AdvantageList value={sheet.desvantagens_e_peculiaridades}
+                                       fieldName="desvantagens_e_peculiaridades"
+                                       onValueChange={handleChange}/>
                     </SectionContainer>
                 </CardContent>
                 <CardContent className="flex flex-col w-full gap-5">
                     <SectionContainer title="Linguas">
-                        <LanguageList/>
+                        <LanguageList value={sheet.languages}
+                                      fieldName="languages"
+                                      onValueChange={handleChange}/>
                     </SectionContainer>
                     <div className={"flex"}>
                         <div className="w-6/12">
@@ -512,14 +511,22 @@ export default function GURPSSheet(params: any) {
                         <div>
                             <SectionContainer title={"Aparar"}>
                                 <div className="flex flex-col justify-center items-center">
-                                    <input className={'text-center text-2xl items-center w-15 h-13'}></input>
-                                    <input className={'text-center  items-center w-15 h-5'}></input>
+                                    <input className={'text-center text-2xl items-center w-15 h-13'}
+                                           onChange={(e) => handleChange("aparar")(e.target.value)}
+                                           value={sheet.aparar}></input>
+                                    <input className={'text-center  items-center w-15 h-5'}
+                                           onChange={(e) => handleChange("aparar_mod")(e.target.value)}
+                                           value={sheet.aparar_mod}></input>
                                 </div>
                             </SectionContainer>
                             <SectionContainer title={"Bloqueio"}>
                                 <div className="flex flex-col justify-center items-center">
-                                    <input className={'text-center text-2xl items-center w-15 h-13'}></input>
-                                    <input className={'text-center  items-center w-15 h-5'}></input>
+                                    <input className={'text-center text-2xl items-center w-15 h-13'}
+                                           onChange={(e) => handleChange("bloqueio")(e.target.value)}
+                                           value={sheet.bloqueio}></input>
+                                    <input className={'text-center  items-center w-15 h-5'}
+                                           onChange={(e) => handleChange("bloqueio_mod")(e.target.value)}
+                                           value={sheet.bloqueio_mod}></input>
                                 </div>
                             </SectionContainer>
                         </div>
@@ -561,7 +568,26 @@ export default function GURPSSheet(params: any) {
                     <SectionContainer title={"Perícias"}>
                         <PericiaList></PericiaList>
                     </SectionContainer>
+
                 </CardContent>
+            </div>
+            <div className={"flex flex-col p-6 gap-5"}>
+                <SectionContainer title={"Armas de Combate Corpo-a-Corpo"}>
+                    <WeaponsList value={sheet.weapons}
+                                 fieldName="weapons"
+                                 onValueChange={handleChange}/>
+
+                </SectionContainer>
+                <SectionContainer title={"Armas de Combate à Distância"}>
+                    <RangedWeaponsList value={sheet.ranged_weapons}
+                                       fieldName="ranged_weapons"
+                                       onValueChange={handleChange}/>
+                </SectionContainer>
+                <SectionContainer title={"Armaduras & Posses"}>
+                    <ArmorList value={sheet.armor}
+                               fieldName="armor"
+                               onValueChange={handleChange}/>
+                </SectionContainer>
             </div>
         </Card>
     );

@@ -5,7 +5,7 @@ import {useState} from "react";
 import {RPGSheetGURPSPericia} from "@/app/services/types";
 import {Edit, Plus, Trash} from "lucide-react";
 
-export default function PericiaList() {
+export default function PericiaList({onValueChange, value, fieldName}) {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [pericias, setPericias] = useState<RPGSheetGURPSPericia[]>([]);

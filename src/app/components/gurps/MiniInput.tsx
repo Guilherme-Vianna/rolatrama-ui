@@ -19,7 +19,7 @@ export default function MiniInput({
                             key={idx}
                             className={`w-${size} text-sm text-center border-x-1`}
                             value={miniValues[idx] || ""}
-                            onChange={(e) => onValueChange(miniFieldName)(e)}
+                            onChange={(e) => onValueChange(miniFieldName)(e.target.value)}
                         />
                     );
                 })}
@@ -33,7 +33,7 @@ export default function MiniInput({
             <input
                 className={`w-${size} text-sm text-center border`}
                 value={mainValue}
-                onChange={(e) => onValueChange(fieldName)(e)}
+                onChange={(e) => onValueChange(fieldName)(e.target.value)}
             />
             {generateMiniInputs(quantity)}
         </div>

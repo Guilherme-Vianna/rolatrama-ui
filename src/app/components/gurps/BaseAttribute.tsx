@@ -20,7 +20,7 @@ export default function BaseAttribute({
                             className="border-1 text-2xl w-10 h-10 text-center"
                             value={values[idx] || ""}
                             onChange={(e) => {
-                                onValueChange(fieldName)(e);
+                                onValueChange(fieldName)(e.target.value);
                             }}
                         />
                     );
@@ -43,7 +43,7 @@ export default function BaseAttribute({
                     className="border-x-2 w-10 h-6 text-center"
                     value={modifier || ""}
                     onChange={(e) => {
-                        onValueChange(`${attributeName}_mod`)(e);
+                        onValueChange(`${attributeName}_mod`)(e.target.value);
                     }}
                 />
             </div>
