@@ -566,7 +566,8 @@ export default function GURPSSheet(params: any) {
                         </SectionContainer>
                     </div>
                     <SectionContainer title={"Perícias"}>
-                        <PericiaList></PericiaList>
+                        <PericiaList onValueChange={handleChange} fieldName={'pericias'}
+                                     value={sheet.pericias}></PericiaList>
                     </SectionContainer>
 
                 </CardContent>

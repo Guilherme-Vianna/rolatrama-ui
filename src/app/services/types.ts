@@ -115,6 +115,7 @@ export type RPGSheetGURPSModel = {
     ranged_weapons: RPGSheetGURPSRangedWeapon[];
     armor: RPGSheetGURPSArmor[];
     languages: RPGSheetGURPSLanguages[];
+    pericias: RPGSheetGURPSPericia[];
 };
 
 export type RPGSheetGURPSArmor = {

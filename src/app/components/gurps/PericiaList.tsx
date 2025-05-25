@@ -1,7 +1,7 @@
 "use client";
 
 import {Button} from "@/components/ui/button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {RPGSheetGURPSPericia} from "@/app/services/types";
 import {Edit, Plus, Trash} from "lucide-react";
 
@@ -23,6 +23,18 @@ export default function PericiaList({onValueChange, value, fieldName}) {
         nh_relativo: ''
     });
 
+    useEffect(() => {
+        if (value && Array.isArray(value)) {
+            setPericias(value);
+        }
+    }, [value]);
+
+    useEffect(() => {
+        if (pericias.length > 0 || value === undefined) {
+            onValueChange(fieldName)(pericias);
+        }
+    }, [pericias]);
+
     function addPericia() {
         if (newPericia.name.trim()) {
             setPericias([...pericias, newPericia]);
@@ -32,6 +44,7 @@ export default function PericiaList({onValueChange, value, fieldName}) {
                 nh: '',
                 nh_relativo: ''
             });
+            onValueChange(fieldName)(pericias);
             setIsCreateModalOpen(false);
         }
     }
@@ -68,6 +81,7 @@ export default function PericiaList({onValueChange, value, fieldName}) {
     function deletePericia(index: number) {
         const updatedPericias = [...pericias];
         updatedPericias.splice(index, 1);
+        onValueChange(fieldName)(updatedPericias);
         setPericias(updatedPericias);
     }
 
