@@ -45,6 +45,11 @@ export type RPGSheetGURPSLanguages = {
     pontos: string;
 };
 
+export type RPGSheetGURPSModelList = {
+    data: RPGSheetGURPSModel;
+    updateAt: Date;
+    createdAt: Date;
+}
 
 export type RPGSheetGURPSModel = {
     nome: string;

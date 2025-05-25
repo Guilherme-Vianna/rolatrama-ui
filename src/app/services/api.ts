@@ -9,7 +9,7 @@ import {
     Town,
     Npc,
     RPGSheet3DTModel,
-    RPGSheetGURPSModel
+    RPGSheetGURPSModel, RPGSheetGURPSModelList
 } from './types';
 
 // Sheet interfaces remain the same
@@ -238,6 +238,17 @@ class ApiService {
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+            }
+            throw error;
+        }
+    }
+
+    async getSheets(): Promise<RPGSheetGURPSModelList[]> {
+        try {
+            return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.SHEETS);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                throw new Error(error.response?.data?.message || 'Failed to fetch sheets');
             }
             throw error;
         }
