@@ -118,11 +118,10 @@ export type RPGSheetGURPSModel = {
     pericias: RPGSheetGURPSPericia[];
 };
 
-export type RPGSheetGURPSArmor = {
-    item: string;
-    posicao: string;
-    peso: string;
-    custo: string;
+export type RPGSheetListComponentParams = {
+    onValueChange: any;
+    value: any;
+    fieldName: string;
 }
 
 export type RPGSheetGURPSVantagemQualidade = {

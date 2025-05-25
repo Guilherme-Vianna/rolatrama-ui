@@ -3,12 +3,12 @@
 import {Button} from "@/components/ui/button";
 import {useEffect, useState} from "react";
 import {Check, Edit, Trash, X} from "lucide-react";
-import {RPGSheetGURPSWeapon} from "@/app/services/types";
+import {RPGSheetGURPSWeapon, RPGSheetListComponentParams} from "@/app/services/types";
 
-export default function WeaponsList({onValueChange, value, fieldName}) {
+export default function WeaponsList({onValueChange, value, fieldName}: RPGSheetListComponentParams) {
     const [isAdding, setIsAdding] = useState(false);
     const [languages, setLanguages] = useState<RPGSheetGURPSWeapon[]>([]);
-    const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSWeapon>({});
+    const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSWeapon>();
 
     useEffect(() => {
         if (value && Array.isArray(value)) {
