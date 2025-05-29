@@ -21,6 +21,7 @@ import ArmorList from "@/app/components/gurps/ArmorList";
 export default function GURPSSheet(params: any) {
     const [syncStatus, setSyncStatus] = useState("syncing");
     const [sheet, setSheet] = useState<RPGSheetGURPSModel>({
+        armor: [], languages: [], pericias: [], ranged_weapons: [], weapons: [],
         aparar: "",
         aparar_mod: "",
         bloqueio: "",
@@ -114,6 +115,7 @@ export default function GURPSSheet(params: any) {
         const saveToDatabase = async () => {
             try {
                 setSyncStatus("syncing");
+                console.log(params.id)
                 await api.updateSheet(sheet, params.id);
                 setSyncStatus("success");
             } catch {

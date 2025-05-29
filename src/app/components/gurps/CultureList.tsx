@@ -2,19 +2,19 @@
 
 import {Button} from "@/components/ui/button";
 import {useState} from "react";
-import {RPGSheetGURPSAdvantages, RPGSheetGURPSLanguages} from "@/app/services/types";
+import {RPGSheetGURPSVantagemQualidade} from "@/app/services/types";
 import {Check, Edit, Trash, X} from "lucide-react";
 import {Label} from "@radix-ui/react-label";
 
 export default function CultureList() {
     const [isAdding, setIsAdding] = useState(false);
-    const [languages, setLanguages] = useState<RPGSheetGURPSAdvantages[]>([]);
-    const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSAdvantages>({
+    const [languages, setLanguages] = useState<RPGSheetGURPSVantagemQualidade[]>([]);
+    const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSVantagemQualidade>({
         name: '',
         pontos: ''
     });
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const [editingLanguage, setEditingLanguage] = useState<RPGSheetGURPSAdvantages>({
+    const [editingLanguage, setEditingLanguage] = useState<RPGSheetGURPSVantagemQualidade>({
         name: '',
         pontos: ''
     });
@@ -30,7 +30,7 @@ export default function CultureList() {
         }
     }
 
-    function handleInputChange(field: keyof RPGSheetGURPSLanguages, value: string) {
+    function handleInputChange(field: keyof RPGSheetGURPSVantagemQualidade, value: string) {
         setNewLanguage({
             ...newLanguage,
             [field]: value
@@ -51,7 +51,7 @@ export default function CultureList() {
         }
     }
 
-    function handleEditChange(field: keyof RPGSheetGURPSLanguages, value: string) {
+    function handleEditChange(field: keyof RPGSheetGURPSVantagemQualidade, value: string) {
         setEditingLanguage({
             ...editingLanguage,
             [field]: value

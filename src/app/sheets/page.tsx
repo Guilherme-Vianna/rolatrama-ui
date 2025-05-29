@@ -3,7 +3,7 @@
 import TopBar from "@/app/components/TopBar";
 import {useEffect, useState} from "react";
 import {api} from "@/app/services/api";
-import {RPGSheetGURPSModel, RPGSheetGURPSModelList} from "@/app/services/types";
+import {RPGSheetGURPSModelList} from "@/app/services/types";
 import {useRouter} from "next/navigation";
 
 export default function Page() {
@@ -46,7 +46,7 @@ export default function Page() {
 
     function handleCreateNew() {
         const createSheet = async () => {
-            const result = await api.createSheet()
+            const result = await api.createSheet(null)
             router.push(`/sheets/${result.id}`)
         }
         createSheet();

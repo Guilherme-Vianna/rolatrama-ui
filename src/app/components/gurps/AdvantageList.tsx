@@ -2,10 +2,10 @@
 
 import {Button} from "@/components/ui/button";
 import {useEffect, useState} from "react";
-import {RPGSheetGURPSVantagemQualidade} from "@/app/services/types";
+import IListProps, {RPGSheetGURPSVantagemQualidade} from "@/app/services/types";
 import {Check, Edit, Trash, X} from "lucide-react";
 
-export default function AdvantageList({onValueChange, value, fieldName}) {
+export default function AdvantageList({onValueChange, value, fieldName}: IListProps) {
     const [isAdding, setIsAdding] = useState(false);
     const [languages, setLanguages] = useState<RPGSheetGURPSVantagemQualidade[]>([]);
     const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSVantagemQualidade>({

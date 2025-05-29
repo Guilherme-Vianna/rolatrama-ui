@@ -1,4 +1,5 @@
 import {Label} from "@radix-ui/react-label";
+import {IMiniInputProps} from "@/app/services/types";
 
 export default function MiniInput({
                                       title,
@@ -8,8 +9,8 @@ export default function MiniInput({
                                       miniValues = [],
                                       onValueChange,
                                       fieldName
-                                  }) {
-    const generateMiniInputs = (quantity) => {
+                                  } :  IMiniInputProps) {
+    const generateMiniInputs = (quantity :any) => {
         return (
             <>
                 {Array.from({length: parseInt(quantity)}).map((_, idx) => {

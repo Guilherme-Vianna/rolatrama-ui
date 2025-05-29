@@ -3,12 +3,19 @@
 import {Button} from "@/components/ui/button";
 import {useEffect, useState} from "react";
 import {Check, Edit, Trash, X} from "lucide-react";
-import {RPGSheetGURPSArmor} from "@/app/services/types";
+import IListProps, {RPGSheetGURPSArmor} from "@/app/services/types";
 
-export default function ArmorList({onValueChange, value, fieldName}) {
+
+
+export default function ArmorList({onValueChange, value, fieldName} : IListProps) {
     const [isAdding, setIsAdding] = useState(false);
     const [items, setitems] = useState<RPGSheetGURPSArmor[]>([]);
-    const [newItem, setnewItem] = useState<RPGSheetGURPSArmor>({});
+    const [newItem, setnewItem] = useState<RPGSheetGURPSArmor>({
+        custo: "",
+        peso: "",
+        item: '',
+        posicao: ""
+    });
 
     useEffect(() => {
         if (value && Array.isArray(value)) {
@@ -25,12 +32,20 @@ export default function ArmorList({onValueChange, value, fieldName}) {
     }, [items]);
 
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const [editingItem, seteditingItem] = useState<RPGSheetGURPSArmor>({});
+    const [editingItem, seteditingItem] = useState<RPGSheetGURPSArmor>({
+        custo: "",
+        peso: "",
+        item: '',
+        posicao: ""
+    });
 
     function addLanguage() {
         if (newItem.item.trim()) {
             setitems([...items, newItem]);
-            setnewItem({});
+            setnewItem({    custo: "",
+                peso: "",
+                item: '',
+                posicao: ""});
             setIsAdding(false);
         }
     }
@@ -126,7 +141,7 @@ export default function ArmorList({onValueChange, value, fieldName}) {
                                         <Trash
                                             className="cursor-pointer mx-auto"
                                             onClick={() => {
-                                                const updatedLanguages = [...items];
+                                                const updatedLanguages = Array.isArray(items) ? [...items] : [];
                                                 updatedLanguages.splice(index, 1);
                                                 onValueChange(fieldName)(updatedLanguages);
                                                 setitems(updatedLanguages);

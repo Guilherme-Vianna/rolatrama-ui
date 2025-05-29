@@ -3,12 +3,26 @@
 import {Button} from "@/components/ui/button";
 import {useEffect, useState} from "react";
 import {Check, Edit, Trash, X} from "lucide-react";
-import {RPGSheetGURPSRangedWeapon, RPGSheetGURPSWeapon} from "@/app/services/types";
+import IListProps, {RPGSheetGURPSRangedWeapon, RPGSheetGURPSWeapon} from "@/app/services/types";
 
-export default function RangedWeaponsList({onValueChange, value, fieldName}) {
+export default function RangedWeaponsList({onValueChange, value, fieldName}: IListProps) {
     const [isAdding, setIsAdding] = useState(false);
     const [languages, setLanguages] = useState<RPGSheetGURPSRangedWeapon[]>([]);
-    const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSRangedWeapon>({});
+    const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSRangedWeapon>({
+        arma: "",
+        cdT: "",
+        cl: "",
+        custo: "",
+        dano: "",
+        distancia: "",
+        magnitude: "",
+        notas: "",
+        peso: "",
+        prec: "",
+        rco: "",
+        st: "",
+        tiros: ""
+    });
 
     useEffect(() => {
         if (value && Array.isArray(value)) {
@@ -26,22 +40,22 @@ export default function RangedWeaponsList({onValueChange, value, fieldName}) {
 
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [editingLanguage, setEditingLanguage] = useState<RPGSheetGURPSRangedWeapon>({
+        cdT: "", cl: "", dano: "", distancia: "", magnitude: "", prec: "", rco: "", st: "", tiros: "",
         arma: '',
-        aparar: '',
         notas: '',
         custo: '',
-        peso: '',
+        peso: ''
     });
 
     function addLanguage() {
         if (newLanguage.arma.trim()) {
             setLanguages([...languages, newLanguage]);
             setNewLanguage({
+                cdT: "", cl: "", dano: "", distancia: "", magnitude: "", prec: "", rco: "", st: "", tiros: "",
                 arma: '',
-                aparar: '',
                 notas: '',
                 custo: '',
-                peso: '',
+                peso: ''
             });
             setIsAdding(false);
         }

@@ -210,7 +210,7 @@ class ApiService {
         }
     }
 
-    async createSheet(data: any): Promise<Sheet> {
+    async createSheet(data: any | null): Promise<Sheet> {
         try {
             return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.SHEETS, data);
         } catch (error) {

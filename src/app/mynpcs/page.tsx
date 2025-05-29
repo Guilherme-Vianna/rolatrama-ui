@@ -85,7 +85,7 @@ export default function Home() {
                       </div>
                       <Button
                         variant="ghost"
-                        onClick={() => removeNpc(npc.id)}
+                        // onClick={() => removeNpc(npc.id)}
                         size="icon"
                         className="h-8 w-8 text-muted-foreground hover:text-destructive"
                       >

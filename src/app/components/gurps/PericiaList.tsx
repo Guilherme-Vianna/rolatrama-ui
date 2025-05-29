@@ -2,10 +2,10 @@
 
 import {Button} from "@/components/ui/button";
 import {useEffect, useState} from "react";
-import {RPGSheetGURPSPericia, RPGSheetListComponentParams} from "@/app/services/types";
+import IListProps, {RPGSheetGURPSPericia} from "@/app/services/types";
 import {Edit, Plus, Trash} from "lucide-react";
 
-export default function PericiaList({onValueChange, value, fieldName}: RPGSheetListComponentParams) {
+export default function PericiaList({onValueChange, value, fieldName}: IListProps) {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [pericias, setPericias] = useState<RPGSheetGURPSPericia[]>([]);

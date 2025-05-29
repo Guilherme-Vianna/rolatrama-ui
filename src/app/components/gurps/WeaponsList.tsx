@@ -3,12 +3,14 @@
 import {Button} from "@/components/ui/button";
 import {useEffect, useState} from "react";
 import {Check, Edit, Trash, X} from "lucide-react";
-import {RPGSheetGURPSWeapon, RPGSheetListComponentParams} from "@/app/services/types";
+import IListProps, {RPGSheetGURPSWeapon} from "@/app/services/types";
 
-export default function WeaponsList({onValueChange, value, fieldName}: RPGSheetListComponentParams) {
+export default function WeaponsList({onValueChange, value, fieldName}: IListProps) {
     const [isAdding, setIsAdding] = useState(false);
     const [languages, setLanguages] = useState<RPGSheetGURPSWeapon[]>([]);
-    const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSWeapon>();
+    const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSWeapon>({
+        alcance: "", aparar: "", arma: "", custo: "", dano: "", notas: "", peso: ""
+    });
 
     useEffect(() => {
         if (value && Array.isArray(value)) {
@@ -26,26 +28,26 @@ export default function WeaponsList({onValueChange, value, fieldName}: RPGSheetL
 
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [editingLanguage, setEditingLanguage] = useState<RPGSheetGURPSWeapon>({
+        dano: "",
         arma: '',
-        alcance: "",
         alcance: "",
         aparar: '',
         notas: '',
         custo: '',
-        peso: '',
+        peso: ''
     });
 
     function addLanguage() {
         if (newLanguage.arma.trim()) {
             setLanguages([...languages, newLanguage]);
             setNewLanguage({
+                dano: "",
                 arma: '',
-                alcance: "",
                 alcance: "",
                 aparar: '',
                 notas: '',
                 custo: '',
-                peso: '',
+                peso: ''
             });
             setIsAdding(false);
         }

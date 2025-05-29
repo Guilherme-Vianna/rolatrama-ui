@@ -45,9 +45,26 @@ export type RPGSheetGURPSLanguages = {
     pontos: string;
 };
 
+export type IMiniInputProps = {
+    title: string,
+    size : number,
+    quantity: number,
+    mainValue : any,
+    miniValues? : any,
+    onValueChange : any,
+    fieldName : any,
+}
+
+export default interface IListProps {
+    onValueChange: any;
+    value: any;
+    fieldName: string;
+}
+
 export type RPGSheetGURPSModelList = {
+    id: string;
     data: RPGSheetGURPSModel;
-    updateAt: Date;
+    updatedAt: Date;
     createdAt: Date;
 }
 
@@ -123,11 +140,6 @@ export type RPGSheetGURPSModel = {
     pericias: RPGSheetGURPSPericia[];
 };
 
-export type RPGSheetListComponentParams = {
-    onValueChange: any;
-    value: any;
-    fieldName: string;
-}
 
 export type RPGSheetGURPSVantagemQualidade = {
     name: string;
