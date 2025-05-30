@@ -21,6 +21,7 @@ import ArmorList from "@/app/components/gurps/ArmorList";
 export default function GURPSSheet(params: any) {
     const [syncStatus, setSyncStatus] = useState("syncing");
     const [sheet, setSheet] = useState<RPGSheetGURPSModel>({
+        culturas: [],
         armor: [], languages: [], pericias: [], ranged_weapons: [], weapons: [],
         aparar: "",
         aparar_mod: "",
@@ -506,7 +507,9 @@ export default function GURPSSheet(params: any) {
                             </SectionContainer>
                         </div>
                         <SectionContainer title="Familiaridades Culturais">
-                            <CultureList></CultureList>
+                            <CultureList value={sheet.culturas}
+                                          fieldName="culturas"
+                                          onValueChange={handleChange}></CultureList>
                         </SectionContainer>
                     </div>
                     <div className="flex w-full gap-5">

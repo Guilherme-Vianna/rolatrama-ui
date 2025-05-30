@@ -38,6 +38,11 @@ export type RPGSheetGURPSPericia = {
     nh_relativo: string;
 };
 
+export type RPGSheetCulture = {
+    name: string;
+    pontos: string;
+};
+
 export type RPGSheetGURPSLanguages = {
     name: string;
     falada: string;
@@ -138,6 +143,7 @@ export type RPGSheetGURPSModel = {
     armor: RPGSheetGURPSArmor[];
     languages: RPGSheetGURPSLanguages[];
     pericias: RPGSheetGURPSPericia[];
+    culturas: RPGSheetCulture[];
 };
 
 

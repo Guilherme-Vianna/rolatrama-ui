@@ -86,7 +86,7 @@ export default function LanguageList({onValueChange, value, fieldName}: IListPro
                         <div>Escrita</div>
                         <div>Pontos</div>
                     </div>
-                    {items.map((items, index) => (
+                    {items.map((item, index) => (
                         <div key={index} className="grid grid-cols-6 mb-1 text-center items-center">
                             {editingIndex === index ? (
                                 <>
@@ -125,10 +125,10 @@ export default function LanguageList({onValueChange, value, fieldName}: IListPro
                                 </>
                             ) : (
                                 <>
-                                    <div>{items.name}</div>
-                                    <div>{items.falada}</div>
-                                    <div>{items.escrita}</div>
-                                    <div>{items.pontos}</div>
+                                    <div>{item.name}</div>
+                                    <div>{item.falada}</div>
+                                    <div>{item.escrita}</div>
+                                    <div>{item.pontos}</div>
                                     <div>
                                         <Edit
                                             className="cursor-pointer mx-auto"
@@ -139,7 +139,7 @@ export default function LanguageList({onValueChange, value, fieldName}: IListPro
                                         <Trash
                                             className="cursor-pointer mx-auto"
                                             onClick={() => {
-                                                const updatedLanguages = Array.isArray(items) ? [...items] : [];
+                                                const updatedLanguages = [...items];
                                                 updatedLanguages.splice(index, 1);
                                                 onValueChange(fieldName)(updatedLanguages);
                                                 setitems(updatedLanguages);

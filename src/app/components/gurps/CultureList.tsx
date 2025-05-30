@@ -1,88 +1,95 @@
 "use client";
 
 import {Button} from "@/components/ui/button";
-import {useState} from "react";
-import {RPGSheetGURPSVantagemQualidade} from "@/app/services/types";
+import {useEffect, useState} from "react";
 import {Check, Edit, Trash, X} from "lucide-react";
-import {Label} from "@radix-ui/react-label";
+import IListProps, {RPGSheetCulture} from "@/app/services/types";
 
-export default function CultureList() {
+export default function CultureList({onValueChange, value, fieldName}: IListProps) {
     const [isAdding, setIsAdding] = useState(false);
-    const [languages, setLanguages] = useState<RPGSheetGURPSVantagemQualidade[]>([]);
-    const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSVantagemQualidade>({
-        name: '',
-        pontos: ''
+    const [items, setitems] = useState<RPGSheetCulture[]>([]);
+    const [newItem, setnewItem] = useState<RPGSheetCulture>({
+        name: "",
+        pontos: ""
     });
+
+    useEffect(() => {
+        if (value && Array.isArray(value)) {
+            setitems(value);
+        } else {
+            setitems([]);
+        }
+    }, [value]);
+
+    useEffect(() => {
+        if (items.length > 0 || value === undefined) {
+            onValueChange(fieldName)(items);
+        }
+    }, [items]);
+
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
-    const [editingLanguage, setEditingLanguage] = useState<RPGSheetGURPSVantagemQualidade>({
-        name: '',
-        pontos: ''
+    const [editingItem, seteditingItem] = useState<RPGSheetCulture>({
+        name: "",
+        pontos: ""
     });
 
     function addLanguage() {
-        if (newLanguage.name.trim()) {
-            setLanguages([...languages, newLanguage]);
-            setNewLanguage({
-                name: '',
-                pontos: ''
-            });
+        if (newItem.name.trim()) {
+            setitems([...items, newItem]);
+            setnewItem({   name: "",
+                pontos: ""});
             setIsAdding(false);
         }
     }
 
-    function handleInputChange(field: keyof RPGSheetGURPSVantagemQualidade, value: string) {
-        setNewLanguage({
-            ...newLanguage,
+    function handleInputChange(field: keyof RPGSheetCulture, value: string) {
+        setnewItem({
+            ...newItem,
             [field]: value
         });
     }
 
     function startEditing(index: number) {
         setEditingIndex(index);
-        setEditingLanguage({...languages[index]});
+        seteditingItem({...items[index]});
     }
 
     function saveEdit() {
         if (editingIndex !== null) {
-            const updatedLanguages = [...languages];
-            updatedLanguages[editingIndex] = editingLanguage;
-            setLanguages(updatedLanguages);
+            const updatedLanguages = [...items];
+            updatedLanguages[editingIndex] = editingItem;
+            setitems(updatedLanguages);
             setEditingIndex(null);
         }
     }
 
-    function handleEditChange(field: keyof RPGSheetGURPSVantagemQualidade, value: string) {
-        setEditingLanguage({
-            ...editingLanguage,
+    function handleEditChange(field: keyof RPGSheetCulture, value: string) {
+        seteditingItem({
+            ...editingItem,
             [field]: value
         });
     }
 
     return (
         <>
-            <Label>NT</Label>
-            <div className="flex w-full gap-1">
-                <input className={'w-full border-1'}/>
-                <input className={'w-1/6 border-x-1'}/>
-            </div>
-            {languages.length > 0 && (
+            {items.length > 0 && (
                 <div className="mb-4">
-                    <div className="grid grid-cols-4 font-bold mb-1">
+                    <div className="grid grid-cols-4 font-bold mb-1 text-center">
                         <div>Nome</div>
                         <div>Pontos</div>
                     </div>
-                    {languages.map((lang, index) => (
+                    {items.map((item, index) => (
                         <div key={index} className="grid grid-cols-4 mb-1 text-center items-center">
                             {editingIndex === index ? (
                                 <>
                                     <input
                                         className="border border-gray-300 w-full text-center p-1"
-                                        value={editingLanguage.name}
+                                        value={editingItem.name}
                                         onChange={(e) => handleEditChange('name', e.target.value)}
                                     />
                                     <input
                                         className="border border-gray-300 w-full text-center p-1"
-                                        value={editingLanguage.pontos}
+                                        value={editingItem.pontos}
                                         onChange={(e) => handleEditChange('pontos', e.target.value)}
                                     />
                                     <div>
@@ -100,8 +107,8 @@ export default function CultureList() {
                                 </>
                             ) : (
                                 <>
-                                    <div>{lang.name}</div>
-                                    <div>{lang.pontos}</div>
+                                    <div>{item.name}</div>
+                                    <div>{item.pontos}</div>
                                     <div>
                                         <Edit
                                             className="cursor-pointer mx-auto"
@@ -112,9 +119,10 @@ export default function CultureList() {
                                         <Trash
                                             className="cursor-pointer mx-auto"
                                             onClick={() => {
-                                                const updatedLanguages = [...languages];
+                                                const updatedLanguages = [...items];
                                                 updatedLanguages.splice(index, 1);
-                                                setLanguages(updatedLanguages);
+                                                onValueChange(fieldName)(updatedLanguages);
+                                                setitems(updatedLanguages);
                                             }}
                                         />
                                     </div>
@@ -127,17 +135,17 @@ export default function CultureList() {
 
             {isAdding ? (
                 <div className="flex flex-col gap-2">
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-2 gap-2">
                         <input
                             className="border border-gray-300 w-full text-center p-1"
-                            placeholder="Nome"
-                            value={newLanguage.name}
+                            placeholder="nome"
+                            value={newItem.name}
                             onChange={(e) => handleInputChange('name', e.target.value)}
                         />
                         <input
                             className="border border-gray-300 w-full text-center p-1"
-                            placeholder="Pontos"
-                            value={newLanguage.pontos}
+                            placeholder="pontos"
+                            value={newItem.pontos}
                             onChange={(e) => handleInputChange('pontos', e.target.value)}
                         />
                     </div>

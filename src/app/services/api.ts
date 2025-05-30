@@ -212,7 +212,11 @@ class ApiService {
 
     async createSheet(data: any | null): Promise<Sheet> {
         try {
-            return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.SHEETS, data);
+            if(data == null) {
+                return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.SHEETS, {});
+            }else {
+                return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.SHEETS, data);
+            }
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 throw new Error(error.response?.data?.message || 'Failed to fetch towns');
