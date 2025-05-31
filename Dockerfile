@@ -1,44 +1,25 @@
-# Use the official Node.js runtime as the base image
-FROM node:22-alpine AS base
+FROM node:22-alpine
 
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+# Copiar arquivos de dependências
+COPY package.json yarn.lock ./
 
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Instalar dependências
+RUN yarn install --frozen-lockfile --production
+
+# Copiar código fonte
 COPY . .
 
-RUN npm run build
+# Script para criar .env dinamicamente e iniciar a aplicação
+RUN echo '#!/bin/sh' > /app/start.sh && \
+    echo 'echo "NEXT_PUBLIC_API_URL=$API_URL" > /app/.env.local' >> /app/start.sh && \
+    echo 'yarn build' >> /app/start.sh && \
+    echo 'yarn start' >> /app/start.sh && \
+    chmod +x /app/start.sh
 
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Copy the built application
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/server.js ./
-
-USER nextjs
-
+# Expor porta
 EXPOSE 3000
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-CMD ["node", "server.js"]
+# Usar o script de inicialização
+CMD ["/app/start.sh"]
