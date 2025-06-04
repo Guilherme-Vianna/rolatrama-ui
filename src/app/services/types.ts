@@ -130,12 +130,15 @@ export type RPGSheetGURPSModel = {
     bracos: string;
     maos: string;
     pernas: string;
+    rd_geral: string;
+    rd_mod:string;
     pes: string;
     bloqueio: string;
     bloqueio_mod: string;
     aparar: string;
     aparar_mod: string;
     status: string;
+    aparencia_reacao: string;
     reputacao: string;
     outros: string;
     weapons: RPGSheetGURPSWeapon[];
@@ -144,12 +147,14 @@ export type RPGSheetGURPSModel = {
     languages: RPGSheetGURPSLanguages[];
     pericias: RPGSheetGURPSPericia[];
     culturas: RPGSheetCulture[];
+    notas_gerais: string;
 };
 
 
 export type RPGSheetGURPSVantagemQualidade = {
     name: string;
     pontos: string;
+    notas: string;
 }
 
 export type RPGSheetGURPSWeapon = {

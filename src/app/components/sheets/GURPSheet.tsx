@@ -17,10 +17,13 @@ import PericiaList from "@/app/components/gurps/PericiaList";
 import WeaponsList from "@/app/components/gurps/WeaponsList";
 import RangedWeaponsList from "@/app/components/gurps/RangedWeaponsList";
 import ArmorList from "@/app/components/gurps/ArmorList";
+import NotasTextarea from "@/app/components/gurps/NotasTextArea";
 
 export default function GURPSSheet(params: any) {
     const [syncStatus, setSyncStatus] = useState("syncing");
     const [sheet, setSheet] = useState<RPGSheetGURPSModel>({
+        aparencia_reacao: "", notas_gerais: "",
+        rd_geral: "", rd_mod: "",
         culturas: [],
         armor: [], languages: [], pericias: [], ranged_weapons: [], weapons: [],
         aparar: "",
@@ -160,7 +163,7 @@ export default function GURPSSheet(params: any) {
     };
 
     return (
-        <Card className="w-[840] h-[2000] font-rpg">
+        <Card className="w-[840] h-[2500] font-rpg">
             <div className="flex justify-center text-4xl">
                 {/* DADOS BASICOS */}
                 <CardContent className="flex flex-col ">
@@ -453,9 +456,18 @@ export default function GURPSSheet(params: any) {
                                       fieldName="languages"
                                       onValueChange={handleChange}/>
                     </SectionContainer>
-                    <div className={"flex"}>
-                        <div className="w-6/12">
-                            <SectionContainer title="RD">
+                    <div className={"flex gap-5"}>
+                        <SectionContainer title={"RD Geral"}>
+                            <div className="flex flex-col justify-center items-center">
+                                <input className={'text-center text-2xl items-center w-15 h-28'}
+                                       onChange={(e) => handleChange("rd_geral")(e.target.value)}
+                                       value={sheet.rd_geral}></input>
+                                <input className={'text-center  items-center w-15 h-5'}
+                                       onChange={(e) => handleChange("rd_mod")(e.target.value)}
+                                       value={sheet.rd_mod}></input>
+                            </div>
+                        </SectionContainer>
+                        <SectionContainer title="RD's Específicas">
                                 <MiniInput
                                     title="Cabeça"
                                     size={10}
@@ -505,13 +517,12 @@ export default function GURPSSheet(params: any) {
                                     fieldName="pes"
                                 />
                             </SectionContainer>
-                        </div>
-                        <SectionContainer title="Familiaridades Culturais">
-                            <CultureList value={sheet.culturas}
-                                          fieldName="culturas"
-                                          onValueChange={handleChange}></CultureList>
-                        </SectionContainer>
                     </div>
+                    <SectionContainer title="Familiaridades Culturais">
+                        <CultureList value={sheet.culturas}
+                                     fieldName="culturas"
+                                     onValueChange={handleChange}></CultureList>
+                    </SectionContainer>
                     <div className="flex w-full gap-5">
                         <div>
                             <SectionContainer title={"Aparar"}>
@@ -540,9 +551,9 @@ export default function GURPSSheet(params: any) {
                                 title="Aparência"
                                 size={10}
                                 quantity={0}
-                                mainValue={sheet.aparencia}
+                                mainValue={sheet.aparencia_reacao}
                                 onValueChange={handleChange}
-                                fieldName="aparencia"
+                                fieldName="aparencia_reacao"
                             />
                             <MiniInput
                                 title="Status"
@@ -593,6 +604,12 @@ export default function GURPSSheet(params: any) {
                     <ArmorList value={sheet.armor}
                                fieldName="armor"
                                onValueChange={handleChange}/>
+                </SectionContainer>
+            </div>
+
+            <div className={"flex flex-col p-6 gap-5"}>
+                <SectionContainer title={"Notas Gerais"}>
+                    <NotasTextarea value={sheet.notas_gerais} onChange={handleChange("notas_gerais")}/>
                 </SectionContainer>
             </div>
         </Card>

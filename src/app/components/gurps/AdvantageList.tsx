@@ -9,6 +9,7 @@ export default function AdvantageList({onValueChange, value, fieldName}: IListPr
     const [isAdding, setIsAdding] = useState(false);
     const [languages, setLanguages] = useState<RPGSheetGURPSVantagemQualidade[]>([]);
     const [newLanguage, setNewLanguage] = useState<RPGSheetGURPSVantagemQualidade>({
+        notas: "",
         name: '',
         pontos: ''
     });
@@ -29,6 +30,7 @@ export default function AdvantageList({onValueChange, value, fieldName}: IListPr
 
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
     const [editingLanguage, setEditingLanguage] = useState<RPGSheetGURPSVantagemQualidade>({
+        notas: "",
         name: '',
         pontos: ''
     });
@@ -37,6 +39,7 @@ export default function AdvantageList({onValueChange, value, fieldName}: IListPr
         if (newLanguage.name.trim()) {
             setLanguages([...languages, newLanguage]);
             setNewLanguage({
+                notas: "",
                 name: '',
                 pontos: ''
             });
@@ -76,62 +79,84 @@ export default function AdvantageList({onValueChange, value, fieldName}: IListPr
         <>
             {languages.length > 0 && (
                 <div className="mb-4">
-                    <div className="grid grid-cols-4 font-bold mb-1">
+                    <div className="grid grid-cols-4 font-bold mb-1 text-center">
                         <div>Nome</div>
                         <div>Pontos</div>
                     </div>
-                    {languages.map((lang, index) => (
-                        <div key={index} className="grid grid-cols-4 mb-1 text-center items-center">
-                            {editingIndex === index ? (
-                                <>
-                                    <input
-                                        className="border border-gray-300 w-full text-center p-1"
-                                        value={editingLanguage.name}
-                                        onChange={(e) => handleEditChange('name', e.target.value)}
-                                    />
-                                    <input
-                                        className="border border-gray-300 w-full text-center p-1"
-                                        value={editingLanguage.pontos}
-                                        onChange={(e) => handleEditChange('pontos', e.target.value)}
-                                    />
-                                    <div>
-                                        <Check
-                                            className="cursor-pointer mx-auto"
-                                            onClick={saveEdit}
-                                        />
+                    {languages.length > 0 && (
+                        <div className="mb-4">
+                            {languages.map((lang, index) => (
+                                <div key={index} className="mb-2">
+                                    <div className="grid grid-cols-4 mb-1 text-center items-center">
+                                        {editingIndex === index ? (
+                                            <>
+                                                <input
+                                                    className="border border-gray-300 w-full text-center p-1"
+                                                    value={editingLanguage.name}
+                                                    onChange={(e) => handleEditChange('name', e.target.value)}
+                                                />
+                                                <input
+                                                    className="border border-gray-300 w-full text-center p-1"
+                                                    value={editingLanguage.pontos}
+                                                    onChange={(e) => handleEditChange('pontos', e.target.value)}
+                                                />
+                                                <div>
+                                                    <Check
+                                                        className="cursor-pointer mx-auto"
+                                                        onClick={saveEdit}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <X
+                                                        className="cursor-pointer mx-auto"
+                                                        onClick={() => setEditingIndex(null)}
+                                                    />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div>{lang.name}</div>
+                                                <div>{lang.pontos}</div>
+                                                <div>
+                                                    <Edit
+                                                        className="cursor-pointer mx-auto"
+                                                        onClick={() => startEditing(index)}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <Trash
+                                                        className="cursor-pointer mx-auto"
+                                                        onClick={() => {
+                                                            const updatedLanguages = [...languages];
+                                                            updatedLanguages.splice(index, 1);
+                                                            onValueChange(fieldName)(updatedLanguages);
+                                                            setLanguages(updatedLanguages);
+                                                        }}
+                                                    />
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
-                                    <div>
-                                        <X
-                                            className="cursor-pointer mx-auto"
-                                            onClick={() => setEditingIndex(null)}
-                                        />
+                                    <div className="w-full">
+                                        {editingIndex === index ? (
+                                            <textarea
+                                                className="text-left text-gray-500 mt-1 w-full resize-none"
+                                                onChange={(e) => handleEditChange('notas', e.target.value)}
+                                                rows={2}
+                                            />
+                                        ) : (
+                                            <textarea
+                                                className="text-left text-gray-500 mt-1 w-full resize-none"
+                                                value={lang.notas}
+                                                readOnly
+                                                rows={2}
+                                            />
+                                        )}
                                     </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div>{lang.name}</div>
-                                    <div>{lang.pontos}</div>
-                                    <div>
-                                        <Edit
-                                            className="cursor-pointer mx-auto"
-                                            onClick={() => startEditing(index)}
-                                        />
-                                    </div>
-                                    <div>
-                                        <Trash
-                                            className="cursor-pointer mx-auto"
-                                            onClick={() => {
-                                                const updatedLanguages = [...languages];
-                                                updatedLanguages.splice(index, 1);
-                                                onValueChange(fieldName)(updatedLanguages);
-                                                setLanguages(updatedLanguages);
-                                            }}
-                                        />
-                                    </div>
-                                </>
-                            )}
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    )}
                 </div>
             )}
 
@@ -149,6 +174,13 @@ export default function AdvantageList({onValueChange, value, fieldName}: IListPr
                             placeholder="Pontos"
                             value={newLanguage.pontos}
                             onChange={(e) => handleInputChange('pontos', e.target.value)}
+                        />
+                        <input
+                            className="border border-gray-300 w-full text-center p-1"
+                            aria-multiline={true}
+                            placeholder="Notas"
+                            value={newLanguage.notas}
+                            onChange={(e) => handleInputChange('notas', e.target.value)}
                         />
                     </div>
                     <div className="flex gap-2 justify-end">
