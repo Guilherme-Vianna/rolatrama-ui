@@ -9,7 +9,7 @@ import {
     Town,
     Npc,
     RPGSheet3DTModel,
-    RPGSheetGURPSModel, RPGSheetGURPSModelList
+    RPGSheetGURPSModel, RPGSheetGURPSModelList, RPGGames
 } from './types';
 
 // Sheet interfaces remain the same
@@ -150,6 +150,17 @@ class ApiService {
         }
     }
 
+    async deleteGame(id: number): Promise<void> {
+        try {
+            return await this.axiosInstance.delete(`${API_CONFIG.ENDPOINTS.GAMES}/${id}`);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                throw new Error(error.response?.data?.message || 'Failed to delete user');
+            }
+            throw error;
+        }
+    }
+
     async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
         try {
             return await this.axiosInstanceNoAuth.post(API_CONFIG.ENDPOINTS.RESET_PASSWORD, {
@@ -212,10 +223,25 @@ class ApiService {
 
     async createSheet(data: any | null): Promise<Sheet> {
         try {
-            if(data == null) {
+            if (data == null) {
                 return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.SHEETS, {});
-            }else {
+            } else {
                 return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.SHEETS, data);
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+            }
+            throw error;
+        }
+    }
+
+    async createGame(data: any | null): Promise<RPGGames> {
+        try {
+            if (data == null) {
+                return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.GAMES, {});
+            } else {
+                return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.GAMES, data);
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -247,9 +273,31 @@ class ApiService {
         }
     }
 
+    async getGame(id: string): Promise<RPGGames> {
+        try {
+            return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.GAMES + "/" + id);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+            }
+            throw error;
+        }
+    }
+
     async getSheets(): Promise<RPGSheetGURPSModelList[]> {
         try {
             return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.SHEETS);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                throw new Error(error.response?.data?.message || 'Failed to fetch sheets');
+            }
+            throw error;
+        }
+    }
+
+    async getGames(): Promise<RPGGames[]> {
+        try {
+            return await this.axiosInstance.get(API_CONFIG.ENDPOINTS.GAMES);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 throw new Error(error.response?.data?.message || 'Failed to fetch sheets');

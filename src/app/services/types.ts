@@ -73,6 +73,13 @@ export type RPGSheetGURPSModelList = {
     createdAt: Date;
 }
 
+export type RPGGames = {
+    id: string;
+    name: string;
+    description: string;
+}
+
+
 export type RPGSheetGURPSModel = {
     nome: string;
     jogador: string;

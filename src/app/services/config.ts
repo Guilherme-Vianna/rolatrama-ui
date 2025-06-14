@@ -9,5 +9,6 @@ export const API_CONFIG = {
     GENERATE_NPCS: '/ai/generate/npcs',
     NPCS: '/ai/npcs',
     SHEETS: '/sheets',
+    GAMES: '/games',
   },
 };
