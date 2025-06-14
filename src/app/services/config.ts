@@ -10,5 +10,7 @@ export const API_CONFIG = {
     NPCS: '/ai/npcs',
     SHEETS: '/sheets',
     GAMES: '/games',
+    BUGS: '/bugs',
+    IMPROVES: '/improves',
   },
 };

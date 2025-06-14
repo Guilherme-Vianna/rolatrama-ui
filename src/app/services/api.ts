@@ -1,5 +1,5 @@
-import axios, {AxiosInstance, AxiosResponse} from 'axios';
-import {API_CONFIG} from './config';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { API_CONFIG } from './config';
 import {
     CreateUserDto,
     UpdateUserDto,
@@ -236,6 +236,28 @@ class ApiService {
         }
     }
 
+    async createBug(data: any): Promise<any> {
+        try {
+            return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.BUGS, data);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+            }
+            throw error;
+        }
+    }
+
+    async createImprove(data: any): Promise<any> {
+        try {
+            return await this.axiosInstance.post(API_CONFIG.ENDPOINTS.IMPROVES, data);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                throw new Error(error.response?.data?.message || 'Failed to fetch towns');
+            }
+            throw error;
+        }
+    }
+
     async createGame(data: any | null): Promise<RPGGames> {
         try {
             if (data == null) {
@@ -305,6 +327,7 @@ class ApiService {
             throw error;
         }
     }
+
 }
 
 export const api = new ApiService();

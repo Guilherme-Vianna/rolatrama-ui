@@ -45,7 +45,7 @@ export default function TopBar() {
                 >
                   Minhas Fichas
                 </NavigationMenuLink>
-                <NavigationMenuLink
+                {/* <NavigationMenuLink
                   className="w-full px-4 py-2 hover:bg-muted rounded cursor-pointer"
                   onClick={() => router.push("/mytowns")}
                 >
@@ -68,7 +68,7 @@ export default function TopBar() {
                   onClick={() => router.push("/quests")}
                 >
                   Quests
-                </NavigationMenuLink>
+                </NavigationMenuLink> */}
               </div>
             </NavigationMenuContent>
           </NavigationMenuItem>
@@ -80,32 +80,34 @@ export default function TopBar() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Perfil</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="flex flex-col p-2 w-48">
-                <NavigationMenuLink
-                  className="w-full px-4 py-2 hover:bg-muted rounded cursor-pointer"
-                  onClick={() => router.push("/settings")}
-                >
-                  Configurações
-                </NavigationMenuLink>
-                <NavigationMenuLink
-                  className="w-full px-4 py-2 hover:bg-muted rounded cursor-pointer"
-                  onClick={() => router.push("/create-team")}
-                >
-                  Criar Time
-                </NavigationMenuLink>
-                <NavigationMenuLink
-                  className="w-full px-4 py-2 hover:bg-muted rounded cursor-pointer"
-                  onClick={() => router.push("/theme")}
-                >
-                  Tema
-                </NavigationMenuLink>
-                <NavigationMenuLink
-                  className="w-full px-4 py-2 hover:bg-muted rounded cursor-pointer text-red-600"
-                  onClick={logout}
-                >
-                  Sair
-                </NavigationMenuLink>
-              </div>
+              <NavigationMenuLink
+                className="w-full px-4 py-2 hover:bg-muted rounded cursor-pointer text-red-600"
+                onClick={logout}
+              >
+                Sair
+              </NavigationMenuLink>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Bugs e Melhorias</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <NavigationMenuLink
+                className="w-full px-4 py-2 hover:bg-muted rounded cursor-pointer text-red-600"
+                href="/bugs"
+              >
+                Bug
+              </NavigationMenuLink>
+              <NavigationMenuLink
+                className="w-full px-4 py-2 hover:bg-muted rounded cursor-pointer text-green-600"
+                href="/improves"
+              >
+                Melhoria
+              </NavigationMenuLink>
             </NavigationMenuContent>
           </NavigationMenuItem>
         </NavigationMenuList>
